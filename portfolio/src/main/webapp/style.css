@@ -1,9 +1,40 @@
-#content {
-  margin-left: auto;
-  margin-right: auto;
-  width: 650px;
+body {
+  margin-left: 20%;
+  margin-right: 20%;
+  margin-top: 5%;
 }
 
-#greeting-container {
-  margin-top: 20px;
+p {
+  font-family: 'Lora', serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 29px;
+}
+
+h1, h2 {
+  font-family: 'Days One', sans-serif;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 64px;
+}
+
+#main-nav {
+  align-items: center;
+  display: flex;
+  margin-top: 30px;
+}
+
+#profile-img {
+  margin-right: 30px;
+  width: 364px;
+}
+
+nav > ul {
+  list-style-type: none;
+}
+
+nav > ul > li > a {
+  color: black;
+  text-decoration: none;
 }
