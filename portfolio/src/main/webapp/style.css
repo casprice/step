@@ -46,6 +46,11 @@ a {
   text-decoration: none;
 }
 
+img {
+  height: 100%;
+  width: auto;
+}
+
 #main-nav {
   align-items: center;
   display: flex;
@@ -89,14 +94,27 @@ nav > ul > li > a {
   display: flex;
 }
 
-.button-content > img {
-  height: 100%;
-  width: auto;
-}
-
 .button-content > p {
   font-family: 'Days One', sans-serif;
   font-size: 24px;
   margin: 0;
   padding: 0 20px 0 20px;
+}
+
+.exp-item {
+  display: flex;
+  margin: 30px 0 30px 0;
+}
+
+.exp-item > img {
+  margin-top: 25px;
+}
+
+.exp-item-description {
+  line-height: 161%;
+  margin-left: 7%;
+}
+
+.exp-role {
+  font-size: 24px;
 }
