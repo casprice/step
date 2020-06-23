@@ -1,2 +1,15 @@
-target/
+node_modules/
+portfolio/target/
 .idea
+.cache/
+.config/
+.docker/
+.java/
+.local/
+.m2/
+.npm/
+.ssh/
+.bash_history
+.bashrc
+.profile
+.viminfo
