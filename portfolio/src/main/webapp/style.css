@@ -14,7 +14,7 @@ p {
 }
 
 .section {
-  margin: 8% 0 8% 0;
+  margin: 8% 0;
 }
 
 h1 {
@@ -82,7 +82,7 @@ nav > ul > li > a {
 }
 
 .button-panel {
-  margin: 50px 0 50px 0;
+  margin: 50px 0;
 }
 
 .button-panel > button {
@@ -94,11 +94,16 @@ nav > ul > li > a {
   display: flex;
 }
 
+.button-content > img {
+  height: 100%;
+  width: auto;
+}
+
 .button-content > p {
   font-family: 'Days One', sans-serif;
   font-size: 24px;
   margin: 0;
-  padding: 0 20px 0 20px;
+  padding: 0 20px;
 }
 
 .exp-item {
