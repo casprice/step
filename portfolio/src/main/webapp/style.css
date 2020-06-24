@@ -91,6 +91,8 @@ nav > ul > li > a {
 }
 
 .button-panel {
+  align-items: center;
+  display: flex;
   margin: 40px 0;
 }
 
@@ -110,9 +112,12 @@ nav > ul > li > a {
 
 .button-content > p {
   font-family: 'Days One', sans-serif;
-  font-size: 24px;
   margin: 0;
   padding: 0 20px;
+}
+
+.link-btn-text {
+  font-size: 24px;
 }
 
 .exp-item {
@@ -141,4 +146,8 @@ nav > ul > li > a {
 
 .projects-item > div {
   width: 45%;
+}
+
+.contact-text {
+  font-size: 20px;
 }
