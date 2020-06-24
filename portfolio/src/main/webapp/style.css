@@ -30,6 +30,7 @@ h3 {
   font-family: 'Days One', sans-serif;
   font-size: 24px; 
   font-weight: normal;
+  margin: 0;
 }
 
 h1, h2 {
@@ -52,12 +53,15 @@ a {
   text-decoration: none;
 }
 
-#main-nav {
+.flex-img-text {
   align-items: center;
   display: flex;
-  flex-wrap: wrap;
+}
+
+#main-nav {
   margin-top: 6%;
   width: 100%;
+  flex-wrap: wrap;
 }
 
 #profile-img {
@@ -82,8 +86,12 @@ nav > ul > li > a {
   font-size: 24px;
 }
 
+#about-text {
+  margin-right: 4%;
+}
+
 .button-panel {
-  margin: 50px 0;
+  margin: 40px 0;
 }
 
 .button-panel > button {
@@ -105,4 +113,32 @@ nav > ul > li > a {
   font-size: 24px;
   margin: 0;
   padding: 0 20px;
+}
+
+.exp-item {
+  display: flex;
+  margin: 30px 0;
+  align-items: flex-start;
+}
+
+.exp-item > img {
+  margin-top: 25px;
+}
+
+.exp-item-description {
+  line-height: 161%;
+  margin-left: 7%;
+}
+
+.exp-role {
+  font-size: 24px;
+}
+
+.projects-item {
+  display: flex;
+  justify-content: space-between;
+}
+
+.projects-item > div {
+  width: 45%;
 }
