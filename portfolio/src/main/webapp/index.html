@@ -7,7 +7,7 @@
     <script src="script.js"></script>
   </head>
   <body>
-    <div id="landing-content">
+    <div class="section" id="landing-content">
       <h1>Casey Price</h1>
       <p>Hi! I’m a rising junior at UC San Diego majoring in Computer Science.
          I’m currently working from home as a STEP Engineering Intern at 
@@ -17,12 +17,35 @@
       <nav id="main-nav">
         <img id="profile-img" src="images/profile.jpeg">
         <ul>
-          <li><a href="#">About Me</a></li>
+          <li><a href="#about-me-content">About Me</a></li>
           <li><a href="#">Experience</a></li>
           <li><a href="#">Projects</a></li>
           <li><a href="#">Contact</a></li>
         </ul>
       </nav>
+    </div>
+
+    <div class="section" id="about-me-content">
+      <h2>About Me</h2>
+      <p>I am a software developer from San Gabriel, CA. I'm currently working
+         from home as a Google STEP intern, but I am also an undergraduate 
+         student attending UC San Diego.</p>
+      <div class="button-panel">
+        <button type=button id="resume-btn">
+          <div class="button-content">
+            <img src="images/Polygon 3.png">
+            <p>Resume</p>
+          </div>
+        </button>
+        <button type=button id="email-me-btn">
+          <a href="mailto:c2price@ucsd.edu">
+            <div class="button-content">
+              <img src="images/Polygon 3.png">
+              <p>Email Me</p>
+            </div>
+          </a>
+        </button>
+      </div>
     </div>
   </body>
 </html>
