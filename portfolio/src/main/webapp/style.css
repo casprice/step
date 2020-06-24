@@ -108,7 +108,7 @@ nav > ul > li > a {
 
 .exp-item {
   display: flex;
-  margin: 30px 0 30px 0;
+  margin: 30px 0;
 }
 
 .exp-item > img {
