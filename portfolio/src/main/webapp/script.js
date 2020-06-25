@@ -27,10 +27,29 @@ function addRandomGreeting() {
   greetingContainer.innerText = greeting;
 }
 
-function addGreeting() {
-  fetch('/data')
-    .then(response => response.text())
-    .then((greeting) => {
-      document.getElementById('greeting').innerText = greeting;
+/**
+ * Fetches stats from the servers and adds them to the DOM.
+ */
+function getComments() {
+  fetch('/comments').then(response => response.json()).then((comments) => {
+    // comments is an ArrayList, so we have to
+    // reference its fields by index to create HTML content
+
+    console.log(comments);
+
+    const commentsListElement = document.getElementById('comments-container');
+    commentsListElement.innerHTML = '';
+    for (let i = 0; i < comments.length; i++) {
+      commentsListElement.appendChild(
+        createListElement('Comment ' + (i + 1) + ': ' + comments[i])
+      )
+    }
   });
+}
+
+/** Creates an <li> element containing text. */
+function createListElement(text) {
+  const liElement = document.createElement('li');
+  liElement.innerText = text;
+  return liElement;
 }
