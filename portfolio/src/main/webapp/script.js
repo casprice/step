@@ -27,12 +27,6 @@ function addRandomGreeting() {
   greetingContainer.innerText = greeting;
 }
 
-function addGreeting() {
-  fetch('/data').then(response => response.text()).then((greeting) => {
-    document.getElementById('greeting').innerText = greeting;
-  });
-}
-
 /**
  * Fetches stats from the servers and adds them to the DOM.
  */
