@@ -26,6 +26,13 @@ h2 {
   padding-top: 30px;
 }
 
+h3 {
+  font-family: 'Days One', sans-serif;
+  font-size: 24px; 
+  font-weight: normal;
+  margin: 0;
+}
+
 h1, h2 {
   font-family: 'Days One', sans-serif;
   font-style: normal;
@@ -84,6 +91,8 @@ nav > ul > li > a {
 }
 
 .button-panel {
+  align-items: center;
+  display: flex;
   margin: 40px 0;
 }
 
@@ -103,14 +112,18 @@ nav > ul > li > a {
 
 .button-content > p {
   font-family: 'Days One', sans-serif;
-  font-size: 24px;
   margin: 0;
   padding: 0 20px;
+}
+
+.link-btn-text {
+  font-size: 24px;
 }
 
 .exp-item {
   display: flex;
   margin: 30px 0;
+  align-items: flex-start;
 }
 
 .exp-item > img {
@@ -124,4 +137,17 @@ nav > ul > li > a {
 
 .exp-role {
   font-size: 24px;
+}
+
+.projects-item {
+  display: flex;
+  justify-content: space-between;
+}
+
+.projects-item > div {
+  width: 45%;
+}
+
+.contact-text {
+  font-size: 20px;
 }
