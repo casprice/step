@@ -45,12 +45,11 @@ function getComments() {
 
     const commentsListElement = document.getElementById('comments-container');
     commentsListElement.innerHTML = '';
-    commentsListElement.appendChild(
-        createListElement('Comment 1: ' + comments[0]));
-    commentsListElement.appendChild(
-        createListElement('Comment 2: ' + comments[1]));
-    commentsListElement.appendChild(
-        createListElement('Comment 3: ' + comments[2]));
+    for (let i = 0; i < comments.length; i++) {
+      commentsListElement.appendChild(
+        createListElement('Comment ' + (i + 1) + ': ' + comments[i])
+      )
+    }
   });
 }
 
