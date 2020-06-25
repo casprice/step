@@ -32,3 +32,31 @@ function addGreeting() {
     document.getElementById('greeting').innerText = greeting;
   });
 }
+
+/**
+ * Fetches stats from the servers and adds them to the DOM.
+ */
+function getComments() {
+  fetch('/comments').then(response => response.json()).then((comments) => {
+    // comments is an ArrayList, so we have to
+    // reference its fields by index to create HTML content
+
+    console.log(comments);
+
+    const commentsListElement = document.getElementById('comments-container');
+    commentsListElement.innerHTML = '';
+    commentsListElement.appendChild(
+        createListElement('Comment 1: ' + comments[0]));
+    commentsListElement.appendChild(
+        createListElement('Comment 2: ' + comments[1]));
+    commentsListElement.appendChild(
+        createListElement('Comment 3: ' + comments[2]));
+  });
+}
+
+/** Creates an <li> element containing text. */
+function createListElement(text) {
+  const liElement = document.createElement('li');
+  liElement.innerText = text;
+  return liElement;
+}
