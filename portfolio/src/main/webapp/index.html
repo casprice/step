@@ -14,13 +14,13 @@
          Google and am serving as President of the ACM chapter at UC San 
          Diego.</p>
       <p>Keep scrolling, or use the menu items below to jump to a section!</p>
-      <nav id="main-nav">
+      <nav id="main-nav" class="flex-img-text">
         <img id="profile-img" src="images/profile.jpeg">
         <ul>
           <li><a href="#about-me-content">About Me</a></li>
-          <li><a href="#">Experience</a></li>
-          <li><a href="#">Projects</a></li>
-          <li><a href="#">Contact</a></li>
+          <li><a href="#experience-content">Experience</a></li>
+          <li><a href="#projects-content">Projects</a></li>
+          <li><a href="#contact-content">Contact</a></li>
         </ul>
       </nav>
     </div>
@@ -30,18 +30,247 @@
       <p>I am a software developer from San Gabriel, CA. I'm currently working
          from home as a Google STEP intern, but I am also an undergraduate 
          student attending UC San Diego.</p>
+      <p>I first started learning about the underlying components of a web page
+         in middle school. However, it wasn’t until my senior year of high 
+         school that I formalized my learning of Computer Science through my AP
+         CS class and by following online web development tutorials. 
+      </p>
+      <div class="flex-img-text">
+        <div id="about-text">
+          <p>Nowadays, I love exploring the many different facets of Computer
+             Science by attending hackathons, writing software for my robotics
+             lab, and learning the math and engineering behind artificial 
+             intelligence. I also enjoy bringing this knowledge to my peers 
+             through my student org, ACM UCSD, because I know how 
+             overwhelming it can be to get started in such a vast field. In 
+             fact, one of my goals for the 2020-21 school year is to start up
+             an outreach program within ACM UCSD, to help familiarize young 
+             students and minorities in tech run with CS fundamentals.
+          </p>
+          <p>In my free time, my favorite things to do include running and 
+             hiking with friends, reading, and solving crossword puzzles with 
+             my sister.
+          </p>
+          <p>If you’re interested in getting in touch, I’d love to chat with 
+             you! Feel free to check out my resume or email me below.
+          </p>
+        </div>
+        <img src="images/acm_speaking.svg" id="about-img">
+      </div>
       <div class="button-panel">
         <button type=button id="resume-btn">
-          <div class="button-content">
-            <img src="images/Polygon 3.png">
-            <p>Resume</p>
-          </div>
+          <a href="https://drive.google.com/file/d/1d4mnhiZA6tnU54VOJ4BRhtXDHEgfYTj4/view?usp=sharing">
+            <div class="button-content">
+              <img src="images/Polygon 3.png">
+              <p class="link-btn-text">Resume</p>
+            </div>
+          </a>
         </button>
         <button type=button id="email-me-btn">
           <a href="mailto:c2price@ucsd.edu">
             <div class="button-content">
               <img src="images/Polygon 3.png">
-              <p>Email Me</p>
+              <p class="link-btn-text">Email Me</p>
+            </div>
+          </a>
+        </button>
+      </div>
+    </div>
+
+    <div class="section" id="experience-content">
+      <h2>Experience</h2>
+      <div id="exp-list">
+        <div class="exp-item">
+          <img src="images/Google.svg">
+          <div class="exp-item-description">
+            <p class="exp-role">
+              Student Training in Engineering Program Intern
+            </p>
+            <p class="exp-info">
+              <em>Google, LLC</em>
+              &nbsp;&nbsp;|&nbsp;&nbsp;
+              <em>June 2020 - Present</em>
+            </p>
+            <p>As a STEP intern, I will be developing an open source web 
+               application in a team of 3, under the guidance of 2 full-time
+               Googlers.  
+            </p>
+            <div class="button-panel">
+              <button type=button>
+                <a href="https://github.com/casprice/step">
+                  <div class="button-content">
+                    <img src="images/Polygon 3.png">
+                    <p class="link-btn-text">Github repository</p>
+                  </div>
+                </a>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="exp-item">
+          <img src="images/ACM.svg">
+          <div class="exp-item-description">
+            <p class="exp-role">President and Co-founder</p>
+            <p class="exp-info">
+              <em>ACM UC San Diego</em>
+              &nbsp;&nbsp;|&nbsp;&nbsp;
+              <em>March 2019 - Present</em>
+            </p>
+            <p>I began my term in ACM as part of the founding team and as the
+               role Vice President Internal. I oversaw the execution of over 
+               120 events, from technical workshops to community-building 
+               socials, in our first year as a student organization. I also 
+               established much of our logistics pipeline to ensure a smooth 
+               internal workflow. Now, as President I lead over 50 officers 
+               across the boards of ACM UCSD and its 5 special interest 
+               groups, which are separate child organizations at UCSD focused 
+               on specific fields in the computing world.</p>
+            <p>ACM UCSD Contact: 
+              <a href="mailto:casey@acmucsd.org">casey@acmucsd.org</a> 
+            </p>
+            <div class="button-panel">
+              <button type=button>
+                <a href="https://acmucsd.com">
+                  <div class="button-content">
+                    <img src="images/Polygon 3.png">
+                    <p class="link-btn-text">ACM UCSD website</p>
+                  </div>
+                </a>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="exp-item">
+          <img src="images/UCSD.svg">
+          <div class="exp-item-description">
+            <p class="exp-role">Undergraduate Researcher</p>
+            <p class="exp-info">
+              <em>Advanced Robotics and Controls Lab</em>
+              &nbsp;&nbsp;|&nbsp;&nbsp;
+              <em>May 2019 - Present</em>
+            </p>
+            <p>I spent the summer of 2019 working with a team of graduate and 
+               undergraduate engineers designing and building a mobile 
+               serpentine robot configured for deep ocean and extraterrestrial
+               exploration. My contributions involved engineering software 
+               architecture interfaced with ROS to direct and regulate the 
+               robot, and developing external controsl on a remote desktop. 
+               This project was funded by NASA JPL under their 2018-2019 
+               Spontaneous Concept Award, and our research paper was accepted 
+               by the IEEE International Conference on Robotics and Automation 
+               2020. 
+            </p>
+            <p>
+              Now, I am working to develop the robot’s movement controls 
+              further by writing high-level motion planner algorithms to 
+              process and filter sensor data.
+            </p>
+            <div class="button-panel">
+              <button type=button>
+                <a href="https://www.ucsdarclab.com/nasarobot">
+                  <div class="button-content">
+                    <img src="images/Polygon 3.png">
+                    <p class="link-btn-text">Project website</p>
+                  </div>
+                </a>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="exp-item">
+          <img src="images/IEEE.svg">
+          <div class="exp-item-description">
+            <p class="exp-role">Staff Member</p>
+            <p class="exp-info">
+              <em>IEEE UC San Diego</em>
+              &nbsp;&nbsp;|&nbsp;&nbsp
+              <em>October 2018 - June 2019</em>
+            </p>
+            <p>As a Staff Member, I volunteered to teach programming
+               fundamentals in Python, Java, and HTML/CSS at various outreach
+                events, helping dozens of Boy Scouts seeking to earn their 
+                Programming Merit Badge, high school girls interested in STEM, 
+                and college students learning how to code. 
+            </p>
+            <div class="button-panel">
+              <button type=button>
+                <a href="http://ieeeucsd.org/">
+                  <div class="button-content">
+                    <img src="images/Polygon 3.png">
+                    <p class="link-btn-text">IEEE UCSD website</p>
+                  </div>
+                </a>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section" id="projects-content">
+      <h2>Projects</h2>
+      <div class="projects-item">
+        <div>
+          <h3>roadblock</h3>
+          <p>This LA Hacks 2019 submission is a web application that helps 
+            users find the safest route between two locations and crowd 
+            sources crime reports to avoid dangerous areas. This project was 
+            made using node.js, socket.io, Leaflet.js, and the Twilio API.</p>
+        </div>
+        <div>
+          <h3>Honey for Groceries</h3>
+          <p>IOS application that scrapes prices from grocery store websites 
+            to create a custom API that helps users decide where they can buy 
+            the cheapest groceries. The backend on this project was written in 
+            Python and used Beautiful Soup and Requests.</p>
+        </div>
+      </div>
+      <div class="button-panel">
+        <button type=button>
+          <a href="https://github.com/casprice">
+            <div class="button-content">
+              <img src="images/Polygon 3.png">
+              <p class="link-btn-text">See more on Github</p>
+            </div>
+          </a>
+        </button>
+      </div>
+    </div>
+
+    <div class="section" id="contact-content">
+      <h2>Contact</h2>
+      <p>Let’s get in touch! You can connect with me at the following social 
+        media links, or shoot me an email at 
+        <a href="mailto:c2price@ucsd.edu">
+          c2price@ucsd.edu.
+        </a>
+      </p>
+      
+      <div class="button-panel">
+        <button type=button id="email-me-btn">
+          <a href="https://linkedin.com/in/casprice">
+            <div class="button-content">
+              <img src="images/LinkedIn.svg">
+              <p class="contact-text">casprice</p>
+            </div>
+          </a>
+        </button>
+        <button type=button id="email-me-btn">
+          <a href="https://github.com/casprice">
+            <div class="button-content">
+              <img src="images/Github.svg">
+              <p class="contact-text">casprice</p>
+            </div>
+          </a>
+        </button>
+        <button type=button id="email-me-btn">
+          <a href="mailto:c2price@ucsd.edu">
+            <div class="button-content">
+              <img src="images/Email.svg">
+              <p class="contact-text">c2price@ucsd.edu</p>
             </div>
           </a>
         </button>
