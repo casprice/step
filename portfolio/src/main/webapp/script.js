@@ -44,10 +44,10 @@ function getComments() {
 function createCommentElement(comment) {
   console.log(comment)
   const commentElement = document.createElement('li');
-  commentElement.className = 'comment';
+  commentElement.className = 'comment-item';
 
   const nameElement = document.createElement('span');
-  nameElement.innerText = comment.name;
+  nameElement.innerText = comment.name + " said:";
 
   const bodyElement = document.createElement('span');
   bodyElement.innerText = comment.body;
