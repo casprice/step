@@ -35,14 +35,25 @@ function getComments() {
     const commentsListElement = document.getElementById('comments-container');
 
     comments.forEach((comment) => {
-      commentsListElement.appendChild(createListElement(comment));
+      commentsListElement.appendChild(createCommentElement(comment));
     });
   });
 }
 
-/** Creates an <li> element containing text. */
-function createListElement(text) {
-  const liElement = document.createElement('li');
-  liElement.innerText = text;
-  return liElement;
+/** Creates an element that represents a comment. */
+function createCommentElement(comment) {
+  console.log(comment)
+  const commentElement = document.createElement('li');
+  commentElement.className = 'comment';
+
+  const nameElement = document.createElement('span');
+  nameElement.innerText = comment.name;
+
+  const bodyElement = document.createElement('span');
+  bodyElement.innerText = comment.body;
+
+  commentElement.appendChild(nameElement);
+  commentElement.appendChild(document.createElement('br'));
+  commentElement.appendChild(bodyElement);
+  return commentElement;
 }
