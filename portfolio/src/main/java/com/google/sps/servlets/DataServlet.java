@@ -40,9 +40,15 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    // Retrieve commenter name or assign name as Anonymous
     String name = getRequestParam(request, "custom");
-    String comment = getRequestParam(request, "text-input");
-    comments.add(name + " said: " + comment);
+
+    if (name.equals("")) {
+      name = "Anonymous";
+    }
+
+    // Create comment from input name and comment body
+    comments.add(name + " said: " + getRequestParam(request, "text-input"));
     
     response.sendRedirect("/comments.html");
   }
@@ -50,14 +56,10 @@ public class DataServlet extends HttpServlet {
   private String getRequestParam(HttpServletRequest request, String inputName) {
     String input = request.getParameter(inputName);
 
-    if (input == null) {
-      if (inputName.equals("custom")) {
-        input = "Anonymous";
-      } else {
-        input = "";
-      }
+    if (input != null) {
+      return input;
     }
 
-    return input;
+    return "";
   }
 }
