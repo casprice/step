@@ -27,30 +27,31 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/comments")
 public class DataServlet extends HttpServlet {
 
-  private ArrayList<String> comments;
+  private ArrayList<String> comments = new ArrayList<String>();
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    comments = new ArrayList<>();
-    comments.add(
-        "A ship in port is safe, but that is not what ships are for. "
-            + "Sail out to sea and do new things. - Grace Hopper");
-    comments.add("They told me computers could only do arithmetic. - Grace Hopper");
-    comments.add("A ship in port is safe, but that's not what ships are built for. - Grace Hopper");
-
-    String json = convertToJson(comments);
+    response.setContentType("application/json;");
+    String json = new Gson().toJson(comments);
 
     // Send the JSON as the response
-    response.setContentType("text/json;");
     response.getWriter().println(json);
   }
 
-  /**
-   * Converts an ArrayList<String> into a JSON string using the Gson library.
-   */
-  private static String convertToJson(ArrayList<String> comments) {
-    Gson gson = new Gson();
-    String json = gson.toJson(comments);
-    return json;
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    String name = getCommenterName(request);
+    comments.add(name);
+    // String comment = 
+    response.sendRedirect("/comments.html");
+  }
+
+  private String getCommenterName(HttpServletRequest request) {
+    String name = request.getParameter("custom");
+    if (name == null) {
+      name = "Anonymous";
+    }
+
+    return name;
   }
 }

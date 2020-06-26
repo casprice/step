@@ -13,6 +13,21 @@
 // limitations under the License.
 
 /**
+ * Set element with ID enableID to be isEnabled.
+ */
+function setDisabled(enableID, isDisabled) {
+  document.getElementById(enableID).disabled = isDisabled; 
+}
+
+function checkEmptyField() {
+  if(this.value == '') { 
+    document.getElementById('submit_button').disabled = true; 
+  } else { 
+    document.getElementById('submit_button').disabled = false;
+  }
+}
+
+/**
  * Fetches stats from the servers and adds them to the DOM.
  */
 function getComments() {
@@ -23,12 +38,16 @@ function getComments() {
     console.log(comments);
 
     const commentsListElement = document.getElementById('comments-container');
-    commentsListElement.innerHTML = '';
-    for (let i = 0; i < comments.length; i++) {
-      commentsListElement.appendChild(
-        createListElement('Comment ' + (i + 1) + ': ' + comments[i])
-      )
-    }
+    // commentsListElement.innerHTML = '';
+    comments.forEach((comment) => {
+      commentsListElement.appendChild(createListElement(comment));
+    });
+    // for (let i = 0; i < comments.length; i++) {
+    //   commentsListElement.appendChild(
+    //     createListElement('Comment ' + (i + 1) + ': ' + comments[i])
+    //   )
+    // }
+    
   });
 }
 
