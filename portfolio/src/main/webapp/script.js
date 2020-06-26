@@ -32,22 +32,11 @@ function checkEmptyField() {
  */
 function getComments() {
   fetch('/comments').then(response => response.json()).then((comments) => {
-    // comments is an ArrayList, so we have to
-    // reference its fields by index to create HTML content
-
-    console.log(comments);
-
     const commentsListElement = document.getElementById('comments-container');
-    // commentsListElement.innerHTML = '';
+
     comments.forEach((comment) => {
       commentsListElement.appendChild(createListElement(comment));
     });
-    // for (let i = 0; i < comments.length; i++) {
-    //   commentsListElement.appendChild(
-    //     createListElement('Comment ' + (i + 1) + ': ' + comments[i])
-    //   )
-    // }
-    
   });
 }
 
