@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servlet that returns some example content. TODO: modify this file to handle comments data */
+/** Servlet that handles comments data */
 @WebServlet("/comments")
 public class DataServlet extends HttpServlet {
 
@@ -40,18 +40,24 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String name = getCommenterName(request);
-    comments.add(name);
-    // String comment = 
+    String name = getRequestParam(request, "custom");
+    String comment = getRequestParam(request, "text-input");
+    comments.add(name + " said: " + comment);
+    
     response.sendRedirect("/comments.html");
   }
 
-  private String getCommenterName(HttpServletRequest request) {
-    String name = request.getParameter("custom");
-    if (name == null) {
-      name = "Anonymous";
+  private String getRequestParam(HttpServletRequest request, String inputName) {
+    String input = request.getParameter(inputName);
+
+    if (input == null) {
+      if (inputName.equals("custom")) {
+        input = "Anonymous";
+      } else {
+        input = "";
+      }
     }
 
-    return name;
+    return input;
   }
 }
