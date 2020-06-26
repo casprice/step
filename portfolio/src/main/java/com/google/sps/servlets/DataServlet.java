@@ -14,9 +14,17 @@
 
 package com.google.sps.servlets;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.gson.Gson;
+import com.google.sps.data.Comment;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Date;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -27,28 +35,46 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/comments")
 public class DataServlet extends HttpServlet {
 
-  private ArrayList<String> comments = new ArrayList<String>();
-
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.setContentType("application/json;");
-    String json = new Gson().toJson(comments);
+    Query query = new Query("Comment").addSort("timestamp", SortDirection.ASCENDING);
 
-    // Send the JSON as the response
-    response.getWriter().println(json);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery results = datastore.prepare(query);
+
+    List<Comment> comments = new ArrayList<>();
+    for (Entity entity : results.asIterable()) {
+      Comment comment = new Comment(entity.getKey().getId(), 
+                                    (String) entity.getProperty("name"),
+                                    (String) entity.getProperty("body"),
+                                    (long) entity.getProperty("timestamp"));
+      comments.add(comment);
+    }
+
+    Gson gson = new Gson();
+
+    response.setContentType("application/json;");
+    response.getWriter().println(gson.toJson(comments));
   }
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Retrieve commenter name or assign name as Anonymous
     String name = getRequestParam(request, "custom");
+    String body = getRequestParam(request, "text-input");
+    long timestamp = System.currentTimeMillis();   
 
     if (name.equals("")) {
       name = "Anonymous";
-    }
+    } 
 
-    // Create comment from input name and comment body
-    comments.add(name + " said: " + getRequestParam(request, "text-input"));
+    Entity commentEntity = new Entity("Comment");
+    commentEntity.setProperty("name", name);
+    commentEntity.setProperty("body", body);
+    commentEntity.setProperty("timestamp", timestamp);
+
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.put(commentEntity);
     
     response.sendRedirect("/comments.html");
   }
