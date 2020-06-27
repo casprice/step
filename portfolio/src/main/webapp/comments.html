@@ -9,6 +9,14 @@
   <body onload="getComments()">
     <div id="content">
       <h1>Comments</h1>
+      <label for="max-comments">Max comments:</label>
+      <select name="max-comments" id="max-comments" onchange="getComments()">
+        <option value="1">1</option>
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="20">20</option>
+      </select>
+
       <ul id="comments-container"></ul>
 
       <form action="/comments" method="POST">
@@ -40,6 +48,7 @@
           onkeyup="checkEmptyField()" >
         <br/><br/>
 
+        <!-- Submit button -->
         <input type="submit" disabled=true id="submit_button" />
       </form>
     </div>

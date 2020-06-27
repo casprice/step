@@ -37,6 +37,13 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    int maxComments = 1;
+    String maxCommentsString = getRequestParam(request, "max-comments");
+    
+    if (!maxCommentsString.equals("")) {
+      maxComments = Integer.parseInt(maxCommentsString);
+    }
+
     Query query = new Query("Comment").addSort("timestamp", SortDirection.ASCENDING);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -44,6 +51,10 @@ public class DataServlet extends HttpServlet {
 
     List<Comment> comments = new ArrayList<>();
     for (Entity entity : results.asIterable()) {
+      if (comments.size() == maxComments) {
+        break;
+      }
+
       Comment comment = new Comment(entity.getKey().getId(), 
                                     (String) entity.getProperty("name"),
                                     (String) entity.getProperty("body"),
