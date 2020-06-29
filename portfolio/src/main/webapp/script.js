@@ -13,18 +13,18 @@
 // limitations under the License.
 
 /**
- * Adds a random greeting to the page.
+ * Set element with ID enableID to be isEnabled.
  */
-function addRandomGreeting() {
-  const greetings =
-      ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
+function setDisabled(enableID, isDisabled) {
+  document.getElementById(enableID).disabled = isDisabled; 
+}
 
-  // Pick a random greeting.
-  const greeting = greetings[Math.floor(Math.random() * greetings.length)];
-
-  // Add it to the page.
-  const greetingContainer = document.getElementById('greeting-container');
-  greetingContainer.innerText = greeting;
+function checkEmptyField() {
+  if(this.value == '') { 
+    document.getElementById('submit_button').disabled = true; 
+  } else { 
+    document.getElementById('submit_button').disabled = false;
+  }
 }
 
 /**
@@ -32,24 +32,28 @@ function addRandomGreeting() {
  */
 function getComments() {
   fetch('/comments').then(response => response.json()).then((comments) => {
-    // comments is an ArrayList, so we have to
-    // reference its fields by index to create HTML content
-
-    console.log(comments);
-
     const commentsListElement = document.getElementById('comments-container');
-    commentsListElement.innerHTML = '';
-    for (let i = 0; i < comments.length; i++) {
-      commentsListElement.appendChild(
-        createListElement('Comment ' + (i + 1) + ': ' + comments[i])
-      )
-    }
+
+    comments.forEach((comment) => {
+      commentsListElement.appendChild(createCommentElement(comment));
+    });
   });
 }
 
-/** Creates an <li> element containing text. */
-function createListElement(text) {
-  const liElement = document.createElement('li');
-  liElement.innerText = text;
-  return liElement;
+/** Creates an element that represents a comment. */
+function createCommentElement(comment) {
+  console.log(comment)
+  const commentElement = document.createElement('li');
+  commentElement.className = 'comment-item';
+
+  const nameElement = document.createElement('span');
+  nameElement.innerText = comment.name + " said:";
+
+  const bodyElement = document.createElement('span');
+  bodyElement.innerText = comment.body;
+
+  commentElement.appendChild(nameElement);
+  commentElement.appendChild(document.createElement('br'));
+  commentElement.appendChild(bodyElement);
+  return commentElement;
 }

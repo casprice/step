@@ -10,6 +10,38 @@
     <div id="content">
       <h1>Comments</h1>
       <ul id="comments-container"></ul>
+
+      <form action="/comments" method="POST">
+        <p>Enter your comment:</p>
+        <!-- Comment textarea -->
+        <textarea name="text-input" onkeyup="checkEmptyField()"></textarea>
+        <br/><br/>
+
+        <!-- Name input -->
+        <input 
+          onclick="setDisabled('commenter',true)" 
+          type="radio" 
+          name="name" 
+          checked="checked">
+          Post anonymously
+        
+        <br/>
+        <input 
+          onclick="setDisabled('commenter',false)" 
+          type="radio" 
+          name="name">
+          Post as 
+        <input 
+          type="text" 
+          name="custom" 
+          id="commenter" 
+          disabled=true
+          placeholder="Name"
+          onkeyup="checkEmptyField()" >
+        <br/><br/>
+
+        <input type="submit" disabled=true id="submit_button" />
+      </form>
     </div>
   </body>
 </html>
