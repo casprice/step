@@ -71,4 +71,3 @@ function deleteComments() {
       getComments();
   });
 }
-
