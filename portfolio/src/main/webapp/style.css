@@ -151,3 +151,12 @@ nav > ul > li > a {
 .contact-text {
   font-size: 20px;
 }
+
+#comments-container {
+  list-style-type: none;
+  padding: 0;
+}
+
+.comment-item {
+  margin: 20px 0;
+}

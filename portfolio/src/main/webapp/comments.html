@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Comments</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+  </head>
+  <body onload="getComments()">
+    <div id="content">
+      <h1>Comments</h1>
+      <!-- Max comments dropdown menu -->
+      <label for="max-comments">Max comments:</label>
+      <select name="max-comments" id="max-comments" onchange="getComments()">
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="20">20</option>
+        <option value="50">50</option>
+      </select>
+
+      <!-- Delete all comments button -->
+      <input onclick="deleteComments()" type="submit" id="delete-all-btn" value="Delete All Comments"/>
+
+      <!-- Comments section -->
+      <ul id="comments-container"></ul>
+
+      <form action="/get-comments" method="POST">
+        <p>Enter your comment:</p>
+        <!-- Comment textarea -->
+        <textarea name="text-input" onkeyup="checkEmptyField()"></textarea>
+        <br/><br/>
+
+        <!-- Name input -->
+        <input 
+          onclick="setDisabled('commenter',true)" 
+          type="radio" 
+          name="name" 
+          checked="checked">
+          Post anonymously
+        
+        <br/>
+        <input 
+          onclick="setDisabled('commenter',false)" 
+          type="radio" 
+          name="name">
+          Post as 
+        <input 
+          type="text" 
+          name="custom" 
+          id="commenter" 
+          disabled=true
+          placeholder="Name"
+          onkeyup="checkEmptyField()" >
+        <br/><br/>
+
+        <!-- Submit button -->
+        <input type="submit" disabled=true id="submit_button" onclick="getComments()" />
+      </form>
+    </div>
+  </body>
+</html>

@@ -13,16 +13,61 @@
 // limitations under the License.
 
 /**
- * Adds a random greeting to the page.
+ * Set element with ID enableID to be isEnabled.
  */
-function addRandomGreeting() {
-  const greetings =
-      ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
+function setDisabled(enableID, isDisabled) {
+  document.getElementById(enableID).disabled = isDisabled; 
+}
 
-  // Pick a random greeting.
-  const greeting = greetings[Math.floor(Math.random() * greetings.length)];
+/**
+ * Enable the submit button if this element contains text.
+ */
+function checkEmptyField() {
+  if(this.value == '') { 
+    document.getElementById('submit_button').disabled = true; 
+  } else { 
+    document.getElementById('submit_button').disabled = false;
+  }
+}
 
-  // Add it to the page.
-  const greetingContainer = document.getElementById('greeting-container');
-  greetingContainer.innerText = greeting;
+/**
+ * Fetches stats from the servers and adds them to the DOM.
+ */
+function getComments() {
+  fetch('/get-comments?max-comments=' + document.getElementById("max-comments").value)
+    .then(response => response.json())
+    .then((comments) => {
+      const commentsListElement = document.getElementById('comments-container');
+      commentsListElement.innerHTML = "";
+
+      comments.forEach((comment) => {
+        commentsListElement.appendChild(createCommentElement(comment));
+      });
+  });
+}
+
+/** Creates an element that represents a comment. */
+function createCommentElement(comment) {
+  const commentElement = document.createElement('li');
+  commentElement.className = 'comment-item';
+
+  const nameElement = document.createElement('span');
+  nameElement.innerText = comment.name + " said:";
+
+  const bodyElement = document.createElement('span');
+  bodyElement.innerText = comment.body;
+
+  commentElement.appendChild(nameElement);
+  commentElement.appendChild(document.createElement('br'));
+  commentElement.appendChild(bodyElement);
+  return commentElement;
+}
+
+/** Tells the server to delete the comment */
+function deleteComments() {
+  fetch('/delete-comments', {method: 'POST', body: new URLSearchParams()})
+    .then(response => response.text())
+    .then(() => {
+      getComments();
+  });
 }
