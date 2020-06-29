@@ -34,7 +34,7 @@ function checkEmptyField() {
  * Fetches stats from the servers and adds them to the DOM.
  */
 function getComments() {
-  fetch('/comments?max-comments=' + document.getElementById("max-comments").value)
+  fetch('/get-comments?max-comments=' + document.getElementById("max-comments").value)
     .then(response => response.json())
     .then((comments) => {
       const commentsListElement = document.getElementById('comments-container');
@@ -62,3 +62,13 @@ function createCommentElement(comment) {
   commentElement.appendChild(bodyElement);
   return commentElement;
 }
+
+/** Tells the server to delete the comment */
+function deleteComments() {
+  fetch('/delete-comments', {method: 'POST', body: new URLSearchParams()})
+    .then(response => response.text())
+    .then(() => {
+      getComments();
+  });
+}
+

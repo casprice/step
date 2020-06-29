@@ -9,6 +9,7 @@
   <body onload="getComments()">
     <div id="content">
       <h1>Comments</h1>
+      <!-- Max comments dropdown menu -->
       <label for="max-comments">Max comments:</label>
       <select name="max-comments" id="max-comments" onchange="getComments()">
         <option value="1">1</option>
@@ -17,9 +18,13 @@
         <option value="20">20</option>
       </select>
 
+      <!-- Delete all comments button -->
+      <input onclick="deleteComments()" type="submit" id="delete-all-btn" value="Delete All Comments"/>
+
+      <!-- Comments section -->
       <ul id="comments-container"></ul>
 
-      <form action="/comments" method="POST">
+      <form action="/get-comments" method="POST">
         <p>Enter your comment:</p>
         <!-- Comment textarea -->
         <textarea name="text-input" onkeyup="checkEmptyField()"></textarea>
@@ -49,7 +54,7 @@
         <br/><br/>
 
         <!-- Submit button -->
-        <input type="submit" disabled=true id="submit_button" />
+        <input type="submit" disabled=true id="submit_button" onclick="getComments()" />
       </form>
     </div>
   </body>
