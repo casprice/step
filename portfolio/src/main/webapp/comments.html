@@ -7,55 +7,92 @@
     <script src="script.js"></script>
   </head>
   <body onload="getComments()">
-    <div id="content">
+    <div class="section" id="comments-section">
+      <button type="button" class="text-only-btn">
+        <a href="index.html"> << Back to home </a>
+      </button>
       <h1>Comments</h1>
-      <!-- Max comments dropdown menu -->
-      <label for="max-comments">Max comments:</label>
-      <select name="max-comments" id="max-comments" onchange="getComments()">
-        <option value="5">5</option>
-        <option value="10">10</option>
-        <option value="20">20</option>
-        <option value="50">50</option>
-      </select>
+      <div id="comments-section-content">
+        <div class="comments-section-block">
+          <div class="comment-item">
+            <img src="images/User_photo.svg"/>
+            <form action="/get-comments" method="POST" id="new-comment-form">
+              <!-- Comment textarea -->
+              <textarea 
+                id="text-input" 
+                name="text-input" 
+                onkeyup="checkEmptyField()" 
+                placeholder="Leave a comment..."></textarea>
+              <br/><br/>
 
-      <!-- Delete all comments button -->
-      <input onclick="deleteComments()" type="submit" id="delete-all-btn" value="Delete All Comments"/>
+              <!-- Name input -->
+              <!-- <input 
+                onclick="setDisabled('commenter',true)" 
+                type="radio" 
+                name="name" 
+                checked="checked">
+                Post anonymously
+              
+              <br/>
+              <input 
+                onclick="setDisabled('commenter',false)" 
+                type="radio" 
+                name="name">
+                Post as 
+              <input 
+                type="text" 
+                name="custom" 
+                id="commenter" 
+                disabled=true
+                placeholder="Name"
+                onkeyup="checkEmptyField()" >
+              <br/><br/>
 
-      <!-- Comments section -->
-      <ul id="comments-container"></ul>
+              <!-- Submit button -->
+              <!-- <input type="submit" disabled=true id="submit_button" onclick="getComments()" />  -->
+              <div class="post-div">
+                <input 
+                  type="submit" 
+                  disabled=true
+                  class="text-only-btn" 
+                  name="custom"
+                  onclick="getComments()"
+                  value="Post anonymously"
+                />
+                <input 
+                  type="submit" 
+                  id="comment-log-in-btn" 
+                  disabled=true
+                  class="log-in-button log-in-disabled" 
+                  name="custom"
+                  onclick="getComments()"
+                  value="Log in to Post"
+                />
+              </div>
+            </form>
+          </div>
+        </div>
 
-      <form action="/get-comments" method="POST">
-        <p>Enter your comment:</p>
-        <!-- Comment textarea -->
-        <textarea name="text-input" onkeyup="checkEmptyField()"></textarea>
-        <br/><br/>
+        <div id="posted-comments-title">
+          <h3 id="num-comments-title">0 Comments</h3>
+          <!-- Max comments dropdown menu -->
+          <div>
+            <label for="max-comments">Show:</label>
+            <select name="max-comments" id="max-comments" onchange="getComments()">
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+            </select>
+          </div>
+        </div>
 
-        <!-- Name input -->
-        <input 
-          onclick="setDisabled('commenter',true)" 
-          type="radio" 
-          name="name" 
-          checked="checked">
-          Post anonymously
-        
-        <br/>
-        <input 
-          onclick="setDisabled('commenter',false)" 
-          type="radio" 
-          name="name">
-          Post as 
-        <input 
-          type="text" 
-          name="custom" 
-          id="commenter" 
-          disabled=true
-          placeholder="Name"
-          onkeyup="checkEmptyField()" >
-        <br/><br/>
-
-        <!-- Submit button -->
-        <input type="submit" disabled=true id="submit_button" onclick="getComments()" />
-      </form>
+        <div class="comments-section-block">
+          <!-- Comments section -->
+          <ul id="comments-container"></ul>
+        </div>
+      </div>
+      
     </div>
   </body>
 </html>

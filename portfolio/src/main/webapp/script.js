@@ -24,9 +24,9 @@ function setDisabled(enableID, isDisabled) {
  */
 function checkEmptyField() {
   if(this.value == '') { 
-    document.getElementById('submit_button').disabled = true; 
+    document.getElementById('comment-log-in-btn').disabled = true; 
   } else { 
-    document.getElementById('submit_button').disabled = false;
+    document.getElementById('comment-log-in-btn').disabled = false;
   }
 }
 
@@ -43,6 +43,9 @@ function getComments() {
       comments.forEach((comment) => {
         commentsListElement.appendChild(createCommentElement(comment));
       });
+
+      document.getElementById('num-comments-title').innerText = 
+        comments.length + ' Comments';
   });
 }
 
@@ -51,15 +54,25 @@ function createCommentElement(comment) {
   const commentElement = document.createElement('li');
   commentElement.className = 'comment-item';
 
+  const userImageElement = document.createElement('img');
+  userImageElement.src = 'images/User_photo.svg';
+
+  const commentContentElement = document.createElement('div');
+  commentContentElement.className = 'comment-item-content';
+
   const nameElement = document.createElement('span');
-  nameElement.innerText = comment.name + " said:";
+  nameElement.innerText = comment.name;
+  nameElement.className = 'comment-name';
 
   const bodyElement = document.createElement('span');
   bodyElement.innerText = comment.body;
 
-  commentElement.appendChild(nameElement);
-  commentElement.appendChild(document.createElement('br'));
-  commentElement.appendChild(bodyElement);
+  commentContentElement.appendChild(nameElement);
+  commentContentElement.appendChild(bodyElement);
+
+  commentElement.appendChild(userImageElement);
+  commentElement.appendChild(commentContentElement);
+  
   return commentElement;
 }
 
