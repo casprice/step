@@ -23,10 +23,12 @@ function setDisabled(enableID, isDisabled) {
  * Enable the submit button if this element contains text.
  */
 function checkEmptyField() {
-  if(this.value == '') { 
-    document.getElementById('comment-log-in-btn').disabled = true; 
+  if(document.getElementById('text-input').value == '') { 
+    document.getElementById('comment-log-in-btn').disabled = true;
+    document.getElementById('comment-anon-btn').disabled = true;
   } else { 
     document.getElementById('comment-log-in-btn').disabled = false;
+    document.getElementById('comment-anon-btn').disabled = false;
   }
 }
 

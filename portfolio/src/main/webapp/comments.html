@@ -16,49 +16,30 @@
         <div class="comments-section-block">
           <div class="comment-item">
             <img src="images/User_photo.svg"/>
+
             <form action="/get-comments" method="POST" id="new-comment-form">
-              <!-- Comment textarea -->
-              <textarea 
-                id="text-input" 
-                name="text-input" 
-                onkeyup="checkEmptyField()" 
-                placeholder="Leave a comment..."></textarea>
-              <br/><br/>
+              <div class="comment-item-content">
+                <!-- Commenter name -->
+                <span class="comment-name">Anonymous</span>
 
-              <!-- Name input -->
-              <!-- <input 
-                onclick="setDisabled('commenter',true)" 
-                type="radio" 
-                name="name" 
-                checked="checked">
-                Post anonymously
-              
-              <br/>
-              <input 
-                onclick="setDisabled('commenter',false)" 
-                type="radio" 
-                name="name">
-                Post as 
-              <input 
-                type="text" 
-                name="custom" 
-                id="commenter" 
-                disabled=true
-                placeholder="Name"
-                onkeyup="checkEmptyField()" >
-              <br/><br/>
+                <!-- Comment textarea -->
+                <textarea 
+                  id="text-input" 
+                  name="text-input" 
+                  onkeyup="checkEmptyField()" 
+                  placeholder="Leave a comment..."></textarea>
+              </div>
 
-              <!-- Submit button -->
-              <!-- <input type="submit" disabled=true id="submit_button" onclick="getComments()" />  -->
+              <!-- Post buttons -->
               <div class="post-div">
                 <input 
-                  type="submit" 
+                  type="submit"
+                  id="comment-anon-btn" 
                   disabled=true
                   class="text-only-btn" 
                   name="custom"
                   onclick="getComments()"
-                  value="Post anonymously"
-                />
+                  value="Post anonymously"/>
                 <input 
                   type="submit" 
                   id="comment-log-in-btn" 
@@ -66,8 +47,7 @@
                   class="log-in-button log-in-disabled" 
                   name="custom"
                   onclick="getComments()"
-                  value="Log in to Post"
-                />
+                  value="Log in to Post"/>
               </div>
             </form>
           </div>
