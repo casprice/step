@@ -36,7 +36,7 @@ function checkEmptyField() {
  * Fetches stats from the servers and adds them to the DOM.
  */
 function getComments() {
-  fetch('/get-comments?max-comments=' + document.getElementById("max-comments").value)
+  fetch('/list-comments?max-comments=' + document.getElementById("max-comments").value)
     .then(response => response.json())
     .then((comments) => {
       const commentsListElement = document.getElementById('comments-container');
