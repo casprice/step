@@ -20,11 +20,11 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
 import com.google.sps.data.Comment;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Date;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -37,14 +37,16 @@ public class NewCommentServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // Retrieve commenter name or assign name as Anonymous
-    String name = getRequestParam(request, "custom");
+    UserService userService = UserServiceFactory.getUserService();
+    String name = "Anonymous";
+
+    // If user is logged in, update name of commenter
+    if (userService.isUserLoggedIn()) {
+      name = userService.getCurrentUser().getEmail();
+    }
+
     String body = getRequestParam(request, "text-input");
     long timestamp = System.currentTimeMillis();   
-
-    if (name.equals("")) {
-      name = "Anonymous";
-    } 
 
     Entity commentEntity = new Entity("Comment");
     commentEntity.setProperty("name", name);

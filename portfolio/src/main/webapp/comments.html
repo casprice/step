@@ -6,12 +6,17 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
   </head>
-  <body onload="getComments()">
+  <body onload="loadPage()">
     <div class="section" id="comments-section">
       <button type="button" class="text-only-btn">
         <a href="index.html"> << Back to home </a>
       </button>
       <h1>Comments</h1>
+      <!-- Login button -->
+      <button type="button" id="comment-log-in-btn" class="text-only-btn">
+        <a href="comments.html" id="log-in-btn-link"></a>
+      </button>
+
       <div id="comments-section-content">
         <div class="comments-section-block">
           <div class="comment-item">
@@ -20,7 +25,7 @@
             <form action="/new-comment" method="POST" id="new-comment-form">
               <div class="comment-item-content">
                 <!-- Commenter name -->
-                <span class="comment-name">Anonymous</span>
+                <span class="comment-name" id="new-comment-name"></span>
 
                 <!-- Comment textarea -->
                 <textarea 
@@ -30,24 +35,15 @@
                   placeholder="Leave a comment..."></textarea>
               </div>
 
-              <!-- Post buttons -->
+              <!-- Post button -->
               <div class="post-div">
                 <input 
-                  type="submit"
-                  id="comment-anon-btn" 
-                  disabled=true
-                  class="text-only-btn" 
-                  name="custom"
-                  onclick="getComments()"
-                  value="Post anonymously"/>
-                <input 
                   type="submit" 
-                  id="comment-log-in-btn" 
+                  id="post-comment-btn" 
                   disabled=true
                   class="log-in-button log-in-disabled" 
                   name="custom"
-                  onclick="getComments()"
-                  value="Log in to Post"/>
+                  value="Post"/>
               </div>
             </form>
           </div>
