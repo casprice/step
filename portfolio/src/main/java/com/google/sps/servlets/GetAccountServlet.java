@@ -18,26 +18,26 @@ public class GetAccountServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
-    Credentials cred;
+    Credentials userCredentials;
     String nickname = "Anonymous";
-    String authUrl;
-    boolean loggedIn = userService.isUserLoggedIn();
+    String authenticationUrl;
+    boolean isLoggedIn = userService.isUserLoggedIn();
     Gson gson = new Gson();
     response.setContentType("application/json;");
     
     // If user is not logged in, send back default Anonymous credentials.
-    if (!loggedIn) {
-      authUrl = userService.createLoginURL("/comments.html");
-      cred = new Credentials(nickname, authUrl, loggedIn);
-      response.getWriter().println(gson.toJson(cred));
+    if (!isLoggedIn) {
+      authenticationUrl = userService.createLoginURL("/comments.html");
+      userCredentials = new Credentials(nickname, authenticationUrl, isLoggedIn);
+      response.getWriter().println(gson.toJson(userCredentials));
       return;
     }
 
     // If user is logged in, send back their credentials.
     String email = userService.getCurrentUser().getEmail();
     nickname = email.substring(0, email.indexOf("@"));
-    authUrl = userService.createLogoutURL("/comments.html");
-    cred = new Credentials(nickname, authUrl, loggedIn);
-    response.getWriter().println(gson.toJson(cred));
+    authenticationUrl = userService.createLogoutURL("/comments.html");
+    userCredentials = new Credentials(nickname, authenticationUrl, isLoggedIn);
+    response.getWriter().println(gson.toJson(userCredentials));
   }
 }

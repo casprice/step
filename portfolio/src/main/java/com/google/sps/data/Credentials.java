@@ -4,12 +4,12 @@ package com.google.sps.data;
 public final class Credentials {
 
   private final String nickname;
-  private final String authUrl;
-  private final boolean loggedIn;
+  private final String authenticationUrl;
+  private final boolean isLoggedIn;
 
-  public Credentials(String nickname, String authUrl, boolean loggedIn) {
+  public Credentials(String nickname, String authenticationUrl, boolean isLoggedIn) {
     this.nickname = nickname;
-    this.authUrl = authUrl;
-    this.loggedIn = loggedIn;
+    this.authenticationUrl = authenticationUrl;
+    this.isLoggedIn = isLoggedIn;
   }
 }
