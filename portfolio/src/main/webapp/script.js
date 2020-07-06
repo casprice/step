@@ -12,6 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/** 
+ * When the page loads, get from /login whether the user is logged in, and
+ * update the Login/Logout url and display name accordingly. Then, get the
+ * comments from the Datastore.
+ */
+function loadPage() {
+
+  fetch('/get-account')
+    .then(response => response.json())
+    .then((loginCredentials) => {
+      document.getElementById('new-comment-name').innerText = loginCredentials.nickname;
+      document.getElementById('log-in-btn-link').setAttribute("href", loginCredentials.authenticationUrl);
+
+      if (loginCredentials.isLoggedIn) {
+        document.getElementById('log-in-btn-link').innerHTML = "Log out";
+      } else {
+        document.getElementById('log-in-btn-link').innerHTML = "Log in";
+      }
+  });
+
+  getComments();
+}
+
 /**
  * Set element with ID enableID to be isEnabled.
  */
@@ -23,10 +46,10 @@ function setDisabled(enableID, isDisabled) {
  * Enable the submit button if this element contains text.
  */
 function checkEmptyField() {
-  if(this.value == '') { 
-    document.getElementById('submit_button').disabled = true; 
+  if(document.getElementById('text-input').value == '') { 
+    document.getElementById('post-comment-btn').disabled = true;
   } else { 
-    document.getElementById('submit_button').disabled = false;
+    document.getElementById('post-comment-btn').disabled = false;
   }
 }
 
@@ -34,7 +57,7 @@ function checkEmptyField() {
  * Fetches stats from the servers and adds them to the DOM.
  */
 function getComments() {
-  fetch('/get-comments?max-comments=' + document.getElementById("max-comments").value)
+  fetch('/list-comments?max-comments=' + document.getElementById("max-comments").value)
     .then(response => response.json())
     .then((comments) => {
       const commentsListElement = document.getElementById('comments-container');
@@ -43,6 +66,9 @@ function getComments() {
       comments.forEach((comment) => {
         commentsListElement.appendChild(createCommentElement(comment));
       });
+
+      document.getElementById('num-comments-title').innerText = 
+        comments.length + ' Comments';
   });
 }
 
@@ -51,15 +77,25 @@ function createCommentElement(comment) {
   const commentElement = document.createElement('li');
   commentElement.className = 'comment-item';
 
+  const userImageElement = document.createElement('img');
+  userImageElement.src = 'images/User_photo.svg';
+
+  const commentContentElement = document.createElement('div');
+  commentContentElement.className = 'comment-item-content';
+
   const nameElement = document.createElement('span');
-  nameElement.innerText = comment.name + " said:";
+  nameElement.innerText = comment.name;
+  nameElement.className = 'comment-name';
 
   const bodyElement = document.createElement('span');
   bodyElement.innerText = comment.body;
 
-  commentElement.appendChild(nameElement);
-  commentElement.appendChild(document.createElement('br'));
-  commentElement.appendChild(bodyElement);
+  commentContentElement.appendChild(nameElement);
+  commentContentElement.appendChild(bodyElement);
+
+  commentElement.appendChild(userImageElement);
+  commentElement.appendChild(commentContentElement);
+  
   return commentElement;
 }
 
