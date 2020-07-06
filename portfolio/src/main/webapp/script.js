@@ -12,6 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/** 
+ * When the page loads, get from /login whether the user is logged in, and
+ * update the Login/Logout url and display name accordingly. Then, get the
+ * comments from the Datastore.
+ */
+function loadPage() {
+
+  fetch('/get-account')
+    .then(response => response.json())
+    .then((loginCredentials) => {
+      document.getElementById('new-comment-name').innerText = loginCredentials.nickname;
+      document.getElementById('log-in-btn-link').setAttribute("href", loginCredentials.authUrl);
+
+      if (loginCredentials.loggedIn) {
+        document.getElementById('log-in-btn-link').innerHTML = "Log out";
+      } else {
+        document.getElementById('log-in-btn-link').innerHTML = "Log in";
+      }
+  });
+
+  getComments();
+}
+
 /**
  * Set element with ID enableID to be isEnabled.
  */
@@ -24,11 +47,9 @@ function setDisabled(enableID, isDisabled) {
  */
 function checkEmptyField() {
   if(document.getElementById('text-input').value == '') { 
-    document.getElementById('comment-log-in-btn').disabled = true;
-    document.getElementById('comment-anon-btn').disabled = true;
+    document.getElementById('post-comment-btn').disabled = true;
   } else { 
-    document.getElementById('comment-log-in-btn').disabled = false;
-    document.getElementById('comment-anon-btn').disabled = false;
+    document.getElementById('post-comment-btn').disabled = false;
   }
 }
 
