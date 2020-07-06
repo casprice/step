@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+var map;
+
 /** 
  * When the page loads, get from /login whether the user is logged in, and
  * update the Login/Logout url and display name accordingly. Then, get the
@@ -105,5 +107,12 @@ function deleteComments() {
     .then(response => response.text())
     .then(() => {
       getComments();
+  });
+}
+
+function initMap() {
+  map = new google.maps.Map(document.getElementById("map"), {
+    center: { lat: -34.397, lng: 150.644 },
+    zoom: 8
   });
 }
