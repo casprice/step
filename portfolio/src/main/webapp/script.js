@@ -23,9 +23,9 @@ function loadPage() {
     .then(response => response.json())
     .then((loginCredentials) => {
       document.getElementById('new-comment-name').innerText = loginCredentials.nickname;
-      document.getElementById('log-in-btn-link').setAttribute("href", loginCredentials.authUrl);
+      document.getElementById('log-in-btn-link').setAttribute("href", loginCredentials.authenticationUrl);
 
-      if (loginCredentials.loggedIn) {
+      if (loginCredentials.isLoggedIn) {
         document.getElementById('log-in-btn-link').innerHTML = "Log out";
       } else {
         document.getElementById('log-in-btn-link').innerHTML = "Log in";
