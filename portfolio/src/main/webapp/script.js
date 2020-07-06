@@ -18,7 +18,8 @@
  * comments from the Datastore.
  */
 function loadPage() {
-  fetch('/login')
+
+  fetch('/get-account')
     .then(response => response.json())
     .then((loginCredentials) => {
       document.getElementById('new-comment-name').innerText = loginCredentials.nickname;
@@ -29,7 +30,7 @@ function loadPage() {
       } else {
         document.getElementById('log-in-btn-link').innerHTML = "Log in";
       }
-    });
+  });
 
   getComments();
 }

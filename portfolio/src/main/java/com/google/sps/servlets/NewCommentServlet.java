@@ -42,7 +42,8 @@ public class NewCommentServlet extends HttpServlet {
 
     // If user is logged in, update name of commenter
     if (userService.isUserLoggedIn()) {
-      name = userService.getCurrentUser().getEmail();
+      String email = userService.getCurrentUser().getEmail();
+      name = email.substring(0, email.indexOf("@"));
     }
 
     String body = getRequestParam(request, "text-input");
