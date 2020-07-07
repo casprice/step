@@ -21,7 +21,6 @@ p {
 }
 
 .section {
-  height: 100%;
   margin: 8% 0;
 }
 
@@ -269,6 +268,10 @@ nav > ul > li > a {
 .comment-name {
   font-weight: bold;
   flex-grow: 1;
+}
+
+#map-section {
+  height: 100%;
 }
 
 #map {

@@ -12,6 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+var mapKey = config.MAPS_API_KEY;
+// Create the script tag, set the appropriate attributes
+var script = document.createElement('script');
+script.type= 'text/javascript';
+script.src = 'https://maps.googleapis.com/maps/api/js?key=' + mapKey + '&callback=initMap';
+script.defer = true;
+script.async = true;
+
+// Attach your callback function to the `window` object
+window.initMap = function() {
+  map = new google.maps.Map(document.getElementById("map"), {
+    center: { lat: 32.8328, lng: -117.2713 },
+    zoom: 12
+  });
+};
+
+// Append the 'script' element to 'head'
+document.head.appendChild(script);
+
 var map;
 
 /** 
@@ -107,12 +126,5 @@ function deleteComments() {
     .then(response => response.text())
     .then(() => {
       getComments();
-  });
-}
-
-function initMap() {
-  map = new google.maps.Map(document.getElementById("map"), {
-    center: { lat: -34.397, lng: 150.644 },
-    zoom: 8
   });
 }
