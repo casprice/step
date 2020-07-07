@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Days+One&family=Lora:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Days+One&family=Arimo:wght@400;700&family=Lora:ital@0;1&display=swap');
 
 body {
   font-family: 'Lora', serif;
@@ -19,6 +19,7 @@ p {
 
 h1 {
   font-size: 64px;
+  margin: 4% 0;
 }
 
 h2 {
@@ -152,11 +153,112 @@ nav > ul > li > a {
   font-size: 20px;
 }
 
+#comments-section {
+  font-family: 'Arimo', sans-serif;
+}
+
+#comments-section-content {
+  background-color: #F8F8F8;
+  padding: 6%;
+}
+
+.comments-section-block {
+  background-color: white;
+  padding: 4%;
+}
+
+#new-comment-form {
+  flex-grow: 1;
+}
+
+#text-input {
+  font-family: 'Arimo', sans-serif;
+  outline: none;
+  padding: 10px;
+  resize: vertical;
+  width: 100%;
+}
+
+.post-div {
+  display: flex;
+  justify-content: flex-end;
+}
+
 #comments-container {
   list-style-type: none;
+  margin: 0;
   padding: 0;
 }
 
+.text-only-btn {
+  background-color: white;
+  border: none;
+  font-size: 16px;
+}
+
+.text-only-btn:enabled:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.text-only-btn:disabled:hover {
+  cursor: not-allowed;
+}
+
 .comment-item {
+  align-items: flex-start;
+  display: flex;
+  flex-wrap: wrap;
   margin: 20px 0;
+}
+
+.comment-item:first-of-type, .comment-item:last-of-type {
+  margin: 0;
+}
+
+.comment-item-content {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  margin: 0 15px 15px 15px;
+}
+
+.log-in-button {
+  background-color: #6FB2F1;
+  border: none;
+  border-radius: 4px;
+  font-size: 18px;
+  margin-left: 20px;
+  padding: 8px 22px;
+}
+
+.log-in-button:disabled {
+  background-color: #B8D2EA;
+  color: #9A9A9A;
+}
+
+.log-in-button:hover {
+  cursor: pointer;
+}
+
+.log-in-button:disabled:hover {
+  cursor: not-allowed;
+}
+
+#posted-comments-title {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  margin-top: 30px;
+}
+
+#max-comments {
+  background-color: white;
+  border: none;
+}
+
+.comment-name {
+  font-weight: bold;
+  flex-grow: 1;
 }
