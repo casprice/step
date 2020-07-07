@@ -1,12 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Days+One&family=Arimo:wght@400;700&family=Lora:ital@0;1&display=swap');
 
+html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 body {
   font-family: 'Lora', serif;
   font-size: 18px;
   font-style: normal;
   font-weight: normal;
-  margin-left: 20%;
-  margin-right: 20%;
+  height: 100%;
+  margin: 0 20%;
+  padding: 0;
 }
 
 p {
@@ -261,4 +268,13 @@ nav > ul > li > a {
 .comment-name {
   font-weight: bold;
   flex-grow: 1;
+}
+
+#map-section {
+  height: 100%;
+}
+
+#map {
+  height: 100%;
+  margin-bottom: 30px;
 }
