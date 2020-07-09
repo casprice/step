@@ -52,11 +52,10 @@ public final class FindMeetingQuery {
     
     // Create stack of the given events, merging those that overlap.
     ArrayList<TimeRange> eventTimeRanges = new ArrayList<TimeRange>();
-    Iterator<Event> iterator = existingEvents.iterator();
-    eventTimeRanges.add(iterator.next().getWhen());
+    eventTimeRanges.add(existingEvents.get(0).getWhen());
 
-    while (iterator.hasNext()) {
-      TimeRange currentTimeRange = iterator.next().getWhen();
+    for (Event event : existingEvents) {
+      TimeRange currentTimeRange = event.getWhen();
       TimeRange previousTimeRange = eventTimeRanges.get(eventTimeRanges.size() - 1);
       
       // If the event doesn't overlap the previous one, add it to the stack.
@@ -80,10 +79,13 @@ public final class FindMeetingQuery {
     int endTime = eventTimeRanges.get(eventIndex).start();
     
     while (endTime != TimeRange.END_OF_DAY) {
+      // Check that the time range to be added fits the requested duration.
       if (endTime - startTime >= request.getDuration()) {
         timeRangesList.add(TimeRange.fromStartEnd(startTime, endTime, false));
       }
       
+      // Assign the startTime to be this event's end, and the endTime
+      // to be the next event's start.
       startTime = eventTimeRanges.get(eventIndex).end();
       
       if (eventIndex >= eventTimeRanges.size() - 1) {
@@ -94,6 +96,7 @@ public final class FindMeetingQuery {
       endTime = eventTimeRanges.get(eventIndex).start();
     }
 
+    // Add the remaining portion of the day, if it's long enough.
     if (TimeRange.END_OF_DAY - startTime >= request.getDuration()) {
       timeRangesList.add(TimeRange.fromStartEnd(startTime, TimeRange.END_OF_DAY, true));
     }
