@@ -29,41 +29,74 @@ public final class FindMeetingQuery {
    * times and attendees.
    */
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
+    ArrayList<TimeRange> eventTimeRanges = new ArrayList<TimeRange>();
+    ArrayList<TimeRange> availableTimeRanges = new ArrayList<TimeRange>();
+    
     // Handle request that lasts longer than a day.
     if (request.getDuration() > TimeRange.WHOLE_DAY.duration()) {
       return Arrays.asList();
     }
     
-    // Builds collection of events that conflict with the requested attendees.
-    ArrayList<Event> existingEvents = new ArrayList<Event>();
+    // Build collections of events that conflict with the requested attendees and the
+    // optional attendees.
+    ArrayList<Event> attendedEvents = 
+        getEventsWithAttendees(request.getAttendees(), events);
+    ArrayList<Event> attendedOptionalEvents = 
+        getEventsWithAttendees(request.getOptionalAttendees(), events);
+
+    // Return with the full day if none of the events conflict with the requested attendees.
+    if (attendedEvents.size() == 0 && attendedOptionalEvents.size() == 0) {
+      return Arrays.asList(TimeRange.WHOLE_DAY);
+    }
+    
+    eventTimeRanges = getEventTimeRanges(attendedEvents);
+
+    availableTimeRanges = getAvailableTimeRanges(eventTimeRanges, request.getDuration());
+    
+    return availableTimeRanges;
+  }
+
+  /**
+   * Build a list of events that contain the given attendees.
+   */
+  private ArrayList<Event> getEventsWithAttendees(Collection<String> attendees, 
+                                                  Collection<Event> events) {
+    ArrayList<Event> attendedEvents = new ArrayList<Event>();
     for (Event event : events) {
-      for (String attendee : event.getAttendees()) {
-        if (request.getAttendees().contains(attendee)) {
-          existingEvents.add(event);
+      for (String person : event.getAttendees()) {
+        if (attendees.contains(person)) {
+          attendedEvents.add(event);
           break;
         }
       }
     }
 
-    // Return with the full day if none of the events conflict with the requested attendees.
-    if (existingEvents.size() == 0) {
-      return Arrays.asList(TimeRange.WHOLE_DAY);
-    }
-    
-    // Create stack of the given events, merging those that overlap.
-    ArrayList<TimeRange> eventTimeRanges = new ArrayList<TimeRange>();
-    eventTimeRanges.add(existingEvents.get(0).getWhen());
+    return attendedEvents;
+  }
 
-    for (Event event : existingEvents) {
+  /**
+   * Given a list of events, merge any events that overlap and return the time
+   * ranges of the newly merged events.
+   */
+  private ArrayList<TimeRange> getEventTimeRanges(ArrayList<Event> attendedEvents) {
+    ArrayList<TimeRange> eventTimeRanges = new ArrayList<TimeRange>();
+    if (attendedEvents.size() == 0) {
+      return eventTimeRanges;
+    }
+
+    eventTimeRanges.add(attendedEvents.get(0).getWhen());
+
+    // Get the time ranges 
+    for (Event event : attendedEvents) {
       TimeRange currentTimeRange = event.getWhen();
       TimeRange previousTimeRange = eventTimeRanges.get(eventTimeRanges.size() - 1);
       
-      // If the event doesn't overlap the previous one, add it to the stack.
+      // If the event doesn't overlap the previous one, add its time range to the stack.
       if (previousTimeRange.end() < currentTimeRange.start()) {
         eventTimeRanges.add(currentTimeRange);
       }
 
-      // Merge overlapping events.
+      // If two events overlap in time ranges, merge their time ranges.
       else if (previousTimeRange.end() < currentTimeRange.end()) {
         eventTimeRanges.remove(eventTimeRanges.size() - 1);
         eventTimeRanges.add(TimeRange.fromStartEnd(previousTimeRange.start(), 
@@ -72,35 +105,39 @@ public final class FindMeetingQuery {
       }
     }
 
-    // Get the available time ranges from the merged events.
-    List<TimeRange> timeRangesList = new ArrayList();
-    int eventIndex = 0;
-    int startTime = TimeRange.START_OF_DAY;
-    int endTime = eventTimeRanges.get(eventIndex).start();
+    return eventTimeRanges;
+  }
+
+  /**
+   * Given a list of unavailable time ranges, return the list of time ranges that are 
+   * available throughout the day and fit the duration of a requested meeting.
+   */
+  private ArrayList<TimeRange> getAvailableTimeRanges(ArrayList<TimeRange> takenTimeRanges,
+                                                      long duration) {
+    ArrayList<TimeRange> availableTimeRanges = new ArrayList<TimeRange>();
     
-    while (endTime != TimeRange.END_OF_DAY) {
+    // Get the available time ranges from the merged events.
+    int startTime = TimeRange.START_OF_DAY;
+    int endTime;
+    
+    for (int i = 0; i < takenTimeRanges.size(); i++) {
+      // Assign the next time range's end time to be this event's start time.
+      endTime = takenTimeRanges.get(i).start();
+
       // Check that the time range to be added fits the requested duration.
-      if (endTime - startTime >= request.getDuration()) {
-        timeRangesList.add(TimeRange.fromStartEnd(startTime, endTime, false));
+      if (endTime - startTime >= duration) {
+        availableTimeRanges.add(TimeRange.fromStartEnd(startTime, endTime, false));
       }
       
-      // Assign the startTime to be this event's end, and the endTime
-      // to be the next event's start.
-      startTime = eventTimeRanges.get(eventIndex).end();
-      
-      if (eventIndex >= eventTimeRanges.size() - 1) {
-        break;
-      }
-
-      eventIndex++;
-      endTime = eventTimeRanges.get(eventIndex).start();
+      // Assign the next time range's start time to be this event's end time.
+      startTime = takenTimeRanges.get(i).end();
     }
 
-    // Add the remaining portion of the day, if it's long enough.
-    if (TimeRange.END_OF_DAY - startTime >= request.getDuration()) {
-      timeRangesList.add(TimeRange.fromStartEnd(startTime, TimeRange.END_OF_DAY, true));
+    // Add the remaining portion of the day, if its duration is long enough.
+    if (TimeRange.END_OF_DAY - startTime >= duration) {
+      availableTimeRanges.add(TimeRange.fromStartEnd(startTime, TimeRange.END_OF_DAY, true));
     }
 
-    return timeRangesList;
+    return availableTimeRanges;
   }
 }
