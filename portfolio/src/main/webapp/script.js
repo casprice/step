@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+var map;
 var mapKey = config.MAPS_API_KEY;
 // Create the script tag, set the appropriate attributes
 var script = document.createElement('script');
@@ -19,19 +20,169 @@ script.type= 'text/javascript';
 script.src = 'https://maps.googleapis.com/maps/api/js?key=' + mapKey + '&callback=initMap';
 script.defer = true;
 script.async = true;
-
-// Attach your callback function to the `window` object
-window.initMap = function() {
-  map = new google.maps.Map(document.getElementById("map"), {
-    center: { lat: 32.8328, lng: -117.2713 },
-    zoom: 12
-  });
-};
-
 // Append the 'script' element to 'head'
 document.head.appendChild(script);
 
-var map;
+const restaurants = [
+  ['Tacos El Gordo', 32.629283, -117.089016],
+  ['Vallarta Express Mexican Eatery', 32.916935, -117.124225],
+  ['Lolita\'s Mexican Food', 32.832446, -117.160438],
+  ['Tajima Ramen Convoy', 32.825659, -117.154433],
+  ['Friend\'s House Korean', 32.825478, -117.154096],
+  ['Rakiraki Ramen & Tsukemen', 32.824843, -117.155504],
+  ['Koon Thai Kitchen', 32.814630, -117.153565],
+  ['Kung Fu Tea', 32.830075, -117.152454],
+  ['Happy Lemon Convoy', 32.824842, -117.154448],
+  ['Somi Somi', 32.824393, -117.155277],
+  ['Ding Tea Balboa', 32.819686, -117.177562],
+  ['Wushiland Boba', 32.833550, -117.160382],
+  ['Menya Ultra', 32.832285, -117.147365]
+];
+
+// Attach your callback function to the `window` object
+window.initMap = function() {
+  // Create a new StyledMapType object, passing it an array of styles,
+  // and the name to be displayed on the map type control.
+  var styledMapType = new google.maps.StyledMapType(
+    [
+      {elementType: 'geometry', stylers: [{color: '#ebe3cd'}]},
+      {elementType: 'labels.text.fill', stylers: [{color: '#523735'}]},
+      {elementType: 'labels.text.stroke', stylers: [{color: '#f5f1e6'}]},
+      {
+        featureType: 'administrative',
+        elementType: 'geometry.stroke',
+        stylers: [{color: '#c9b2a6'}]
+      },
+      {
+        featureType: 'administrative.land_parcel',
+        elementType: 'geometry.stroke',
+        stylers: [{color: '#dcd2be'}]
+      },
+      {
+        featureType: 'administrative.land_parcel',
+        elementType: 'labels.text.fill',
+        stylers: [{color: '#ae9e90'}]
+      },
+      {
+        featureType: 'landscape.natural',
+        elementType: 'geometry',
+        stylers: [{color: '#dfd2ae'}]
+      },
+      {
+        featureType: 'poi',
+        elementType: 'geometry',
+        stylers: [{color: '#dfd2ae'}]
+      },
+      {
+        featureType: 'poi',
+        elementType: 'labels.text.fill',
+        stylers: [{color: '#93817c'}]
+      },
+      {
+        featureType: 'poi.park',
+        elementType: 'geometry.fill',
+        stylers: [{color: '#a5b076'}]
+      },
+      {
+        featureType: 'poi.park',
+        elementType: 'labels.text.fill',
+        stylers: [{color: '#447530'}]
+      },
+      {
+        featureType: 'road',
+        elementType: 'geometry',
+        stylers: [{color: '#f5f1e6'}]
+      },
+      {
+        featureType: 'road.arterial',
+        elementType: 'geometry',
+        stylers: [{color: '#fdfcf8'}]
+      },
+      {
+        featureType: 'road.highway',
+        elementType: 'geometry',
+        stylers: [{color: '#f8c967'}]
+      },
+      {
+        featureType: 'road.highway',
+        elementType: 'geometry.stroke',
+        stylers: [{color: '#e9bc62'}]
+      },
+      {
+        featureType: 'road.highway.controlled_access',
+        elementType: 'geometry',
+        stylers: [{color: '#e98d58'}]
+      },
+      {
+        featureType: 'road.highway.controlled_access',
+        elementType: 'geometry.stroke',
+        stylers: [{color: '#db8555'}]
+      },
+      {
+        featureType: 'road.local',
+        elementType: 'labels.text.fill',
+        stylers: [{color: '#806b63'}]
+      },
+      {
+        featureType: 'transit.line',
+        elementType: 'geometry',
+        stylers: [{color: '#dfd2ae'}]
+      },
+      {
+        featureType: 'transit.line',
+        elementType: 'labels.text.fill',
+        stylers: [{color: '#8f7d77'}]
+      },
+      {
+        featureType: 'transit.line',
+        elementType: 'labels.text.stroke',
+        stylers: [{color: '#ebe3cd'}]
+      },
+      {
+        featureType: 'transit.station',
+        elementType: 'geometry',
+        stylers: [{color: '#dfd2ae'}]
+      },
+      {
+        featureType: 'water',
+        elementType: 'geometry.fill',
+        stylers: [{color: '#b9d3c2'}]
+      },
+      {
+        featureType: 'water',
+        elementType: 'labels.text.fill',
+        stylers: [{color: '#92998d'}]
+      }
+    ],
+    {name: 'Styled Map'});
+
+  map = new google.maps.Map(document.getElementById("map"), {
+    center: { lat: 32.8328, lng: -117.2713 },
+    zoom: 11,
+    mapTypeId: 'styled_map'
+  });
+
+  //Associate the styled map with the MapTypeId and set it to display.
+  map.mapTypes.set('styled_map', styledMapType);
+  map.setMapTypeId('styled_map');
+
+  setMarkers();
+};
+
+/**
+ * Adds markers to the map.
+ */
+function setMarkers() {
+  for (var i = 0; i < restaurants.length; i++) {
+    var restaurant = restaurants[i];
+    var marker = new google.maps.Marker({
+      position: {lat: restaurant[1], lng: restaurant[2]},
+      map: map,
+      title: restaurant[0],
+      zIndex: i + 1
+    });
+  }
+}
 
 /** 
  * When the page loads, get from /login whether the user is logged in, and

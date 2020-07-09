@@ -13,3 +13,5 @@ portfolio/target/
 .bashrc
 .profile
 .viminfo
+
+portfolio/src/main/webapp/config.js 
