@@ -18,49 +18,75 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Stack;
 
 public final class FindMeetingQuery {
   /**
    * Takes a collection of Events and a meeting request, and returns a collection of 
    * time ranges that do not conflict with the meeting request in terms of event 
-   * times and attendees.
+   * times and attendees. If there are optional attendees and one or more time slots
+   * exists such that both mandatory and optional attendees may attend, those time
+   * slots are returned. Otherwise, just the time slots that fit the mandatory 
+   * attendees are returned.
    */
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-    ArrayList<TimeRange> eventTimeRanges = new ArrayList<TimeRange>();
-    ArrayList<TimeRange> availableTimeRanges = new ArrayList<TimeRange>();
-    
     // Handle request that lasts longer than a day.
     if (request.getDuration() > TimeRange.WHOLE_DAY.duration()) {
-      return Arrays.asList();
+      return new ArrayList<TimeRange>();
     }
     
-    // Build collections of events that conflict with the requested attendees and the
-    // optional attendees.
+    // Build list of events that conflict with the mandatory requested attendees.
     ArrayList<Event> attendedEvents = 
-        getEventsWithAttendees(request.getAttendees(), events);
+        getEventsWithAttendees(events, request.getAttendees());
+
+    // Build list of events that conflict only with the optional attendees.
     ArrayList<Event> attendedOptionalEvents = 
-        getEventsWithAttendees(request.getOptionalAttendees(), events);
+        getEventsWithAttendees(events, request.getOptionalAttendees());
 
     // Return with the full day if none of the events conflict with the requested attendees.
-    if (attendedEvents.size() == 0 && attendedOptionalEvents.size() == 0) {
+    if (attendedEvents.isEmpty() && attendedOptionalEvents.isEmpty()) {
       return Arrays.asList(TimeRange.WHOLE_DAY);
     }
-    
-    eventTimeRanges = getEventTimeRanges(attendedEvents);
 
-    availableTimeRanges = getAvailableTimeRanges(eventTimeRanges, request.getDuration());
+    // Separately get the time ranges of events on the calendars of the mandatory and 
+    // optional attendees.
+    ArrayList<TimeRange> eventTimeRanges = getEventTimeRanges(attendedEvents);
+    ArrayList<TimeRange> optionalEventTimeRanges = 
+                                           getEventTimeRanges(attendedOptionalEvents);
+
+    // If we only have mandatory attendees or only have optional attendees, find and 
+    // return that group's available time ranges.
+    if (eventTimeRanges.isEmpty()) {
+      return getAvailableTimeRanges(optionalEventTimeRanges, request.getDuration());
+    }
+
+    ArrayList<TimeRange> availableTimeRanges = 
+        getAvailableTimeRanges(eventTimeRanges, request.getDuration());
     
-    return availableTimeRanges;
+    if (optionalEventTimeRanges.isEmpty()) {
+      return availableTimeRanges;
+    }
+
+    // If we have both mandatory and optional attendees, combine the events so that
+    // optional events are only retained if they don't overlap with mandatory events.
+    // Find and return these time ranges only if there are still time ranges left.
+    combineTimeRanges(eventTimeRanges, optionalEventTimeRanges);
+    ArrayList<TimeRange> availableCombinedTimeRanges = 
+        getAvailableTimeRanges(eventTimeRanges, request.getDuration());
+    
+    if (availableCombinedTimeRanges.isEmpty()) {
+      // Adding optional events got rid of all possible time slots, so we want to 
+      // return the available time ranges from before we combined mandatory/optional.
+      return availableTimeRanges;
+    }
+
+    return availableCombinedTimeRanges;
   }
 
   /**
    * Build a list of events that contain the given attendees.
    */
-  private ArrayList<Event> getEventsWithAttendees(Collection<String> attendees, 
-                                                  Collection<Event> events) {
+  private ArrayList<Event> getEventsWithAttendees(Collection<Event> events,
+                                                  Collection<String> attendees) {
     ArrayList<Event> attendedEvents = new ArrayList<Event>();
     for (Event event : events) {
       for (String person : event.getAttendees()) {
@@ -75,37 +101,66 @@ public final class FindMeetingQuery {
   }
 
   /**
-   * Given a list of events, merge any events that overlap and return the time
-   * ranges of the newly merged events.
+   * Given a list of events, get the time ranges that the events take up, merging any 
+   * time ranges that overlap.
    */
   private ArrayList<TimeRange> getEventTimeRanges(ArrayList<Event> attendedEvents) {
-    ArrayList<TimeRange> eventTimeRanges = new ArrayList<TimeRange>();
+    // If there are no events, there are no time ranges to get.
     if (attendedEvents.size() == 0) {
-      return eventTimeRanges;
+      return new ArrayList<TimeRange>();
     }
 
+    ArrayList<TimeRange> eventTimeRanges = new ArrayList<TimeRange>();
     eventTimeRanges.add(attendedEvents.get(0).getWhen());
 
-    // Get the time ranges 
+    // Iterate through each event, adding merged time ranges to eventTimeRanges. 
     for (Event event : attendedEvents) {
       TimeRange currentTimeRange = event.getWhen();
       TimeRange previousTimeRange = eventTimeRanges.get(eventTimeRanges.size() - 1);
       
-      // If the event doesn't overlap the previous one, add its time range to the stack.
+      // If the event starts after the previous one ends, add its time range to the stack.
       if (previousTimeRange.end() < currentTimeRange.start()) {
         eventTimeRanges.add(currentTimeRange);
       }
 
-      // If two events overlap in time ranges, merge their time ranges.
+      // Otherwise, if the event ends after the previous one, merge their time ranges.
       else if (previousTimeRange.end() < currentTimeRange.end()) {
         eventTimeRanges.remove(eventTimeRanges.size() - 1);
         eventTimeRanges.add(TimeRange.fromStartEnd(previousTimeRange.start(), 
-                                                    currentTimeRange.end(), 
-                                                    false));
+                                                   currentTimeRange.end(), 
+                                                   false));
       }
     }
 
     return eventTimeRanges;
+  }
+
+  /**
+   * Combine the time ranges of mandatory and optional events, keeping only the optional
+   * events that do not overlap with mandatory events.
+   */
+  private void combineTimeRanges(ArrayList<TimeRange> mandatory, ArrayList<TimeRange> optional) {
+    int initialSize = mandatory.size();
+    
+    for (TimeRange optionalTimeRange : optional) {
+      boolean overlap = false;
+      for (int i = 0; i < initialSize; i++) {
+        if (optionalTimeRange.overlaps(mandatory.get(i))) {
+          // One overlap means we can't use this time range.
+          overlap = true;
+          break;
+        }
+      }
+
+      if (!overlap) {
+        // Only added if there was no overlap.
+        mandatory.add(optionalTimeRange);
+      }
+    }
+
+    // Sort the time ranges in order of start times in order to find available time slots
+    // between them later on.
+    Collections.sort(mandatory, TimeRange.ORDER_BY_START);
   }
 
   /**
@@ -115,8 +170,6 @@ public final class FindMeetingQuery {
   private ArrayList<TimeRange> getAvailableTimeRanges(ArrayList<TimeRange> takenTimeRanges,
                                                       long duration) {
     ArrayList<TimeRange> availableTimeRanges = new ArrayList<TimeRange>();
-    
-    // Get the available time ranges from the merged events.
     int startTime = TimeRange.START_OF_DAY;
     int endTime;
     
