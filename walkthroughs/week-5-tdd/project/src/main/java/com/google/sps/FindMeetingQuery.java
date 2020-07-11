@@ -21,15 +21,13 @@ import java.util.Collections;
 
 public final class FindMeetingQuery {
   /**
-   * Takes a collection of Events and a meeting request, and returns a collection of 
-   * time ranges that do not conflict with the meeting request in terms of event 
-   * times and attendees. If there are optional attendees and one or more time slots
-   * exists such that both mandatory and optional attendees may attend, those time
-   * slots are returned. Otherwise, just the time slots that fit the mandatory 
+   * Returns a collection of time ranges that do not conflict with the meeting request 
+   * in terms of event times and attendees. If there are optional attendees and one or 
+   * more time slots exists such that both mandatory and optional attendees may attend, 
+   * those time slots are returned. Otherwise, just the time slots that fit the mandatory 
    * attendees are returned.
    */
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-    // Handle request that lasts longer than a day.
     if (request.getDuration() > TimeRange.WHOLE_DAY.duration()) {
       return new ArrayList<TimeRange>();
     }
@@ -68,8 +66,9 @@ public final class FindMeetingQuery {
 
     // If we have both mandatory and optional attendees, combine the events so that
     // optional events are only retained if they don't overlap with mandatory events.
-    // Find and return these time ranges only if there are still time ranges left.
     combineTimeRanges(eventTimeRanges, optionalEventTimeRanges);
+
+    // Find and return the combined time ranges only if there are still time ranges left.
     ArrayList<TimeRange> availableCombinedTimeRanges = 
         getAvailableTimeRanges(eventTimeRanges, request.getDuration());
     
@@ -101,12 +100,12 @@ public final class FindMeetingQuery {
   }
 
   /**
-   * Given a list of events, get the time ranges that the events take up, merging any 
-   * time ranges that overlap.
+   * Returns the time ranges that a list of events take up, merging any time ranges 
+   * that overlap.
    */
   private ArrayList<TimeRange> getEventTimeRanges(ArrayList<Event> attendedEvents) {
     // If there are no events, there are no time ranges to get.
-    if (attendedEvents.size() == 0) {
+    if (attendedEvents.isEmpty()) {
       return new ArrayList<TimeRange>();
     }
 
@@ -117,14 +116,12 @@ public final class FindMeetingQuery {
     for (Event event : attendedEvents) {
       TimeRange currentTimeRange = event.getWhen();
       TimeRange previousTimeRange = eventTimeRanges.get(eventTimeRanges.size() - 1);
-      
-      // If the event starts after the previous one ends, add its time range to the stack.
-      if (previousTimeRange.end() < currentTimeRange.start()) {
-        eventTimeRanges.add(currentTimeRange);
-      }
 
-      // Otherwise, if the event ends after the previous one, merge their time ranges.
-      else if (previousTimeRange.end() < currentTimeRange.end()) {
+      if (previousTimeRange.end() < currentTimeRange.start()) {
+        // The event starts after the previous one ends, so add its time range to the stack.
+        eventTimeRanges.add(currentTimeRange);
+      } else if (previousTimeRange.end() < currentTimeRange.end()) {
+        // The event ends after the previous one, so merge their time ranges.
         eventTimeRanges.remove(eventTimeRanges.size() - 1);
         eventTimeRanges.add(TimeRange.fromStartEnd(previousTimeRange.start(), 
                                                    currentTimeRange.end(), 
@@ -157,10 +154,6 @@ public final class FindMeetingQuery {
         mandatory.add(optionalTimeRange);
       }
     }
-
-    // Sort the time ranges in order of start times in order to find available time slots
-    // between them later on.
-    Collections.sort(mandatory, TimeRange.ORDER_BY_START);
   }
 
   /**
@@ -169,6 +162,8 @@ public final class FindMeetingQuery {
    */
   private ArrayList<TimeRange> getAvailableTimeRanges(ArrayList<TimeRange> takenTimeRanges,
                                                       long duration) {
+    Collections.sort(takenTimeRanges, TimeRange.ORDER_BY_START);
+    
     ArrayList<TimeRange> availableTimeRanges = new ArrayList<TimeRange>();
     int startTime = TimeRange.START_OF_DAY;
     int endTime;
